@@ -15,14 +15,29 @@ d3.json(queryUrl).then(function (data) {
 
 function changeColor(feature) {
 
-  if (feature.properties.mag > 3) {
-    return "red";
+  let depth = feature.geometry.coordinates[2];
+
+
+  if (depth > 90) {
+    return '#800026';
   }
-  else if (feature.properties.mag > 1.5) {
-    return "yellow";
+  else if (depth > 70) {
+    return '#BD0026';
+  }
+  else if (depth > 50) {
+    return '#E31A1C';
+  }
+  else if (depth > 30) {
+    return '#FC4E2A';
+  }
+  else if (depth > 10) {
+    return '#FD8D3C';
+  }
+  else if (depth > 0) {
+    return '#FEB24C';
   }
   else {
-    return "green";
+    return '#FED976';
   }
 }
 
@@ -102,8 +117,8 @@ var legend = L.control({position: 'bottomright'});
 legend.onAdd = function (map) {
 
     var div = L.DomUtil.create('div', 'info legend'),
-        grades = [0, 1.5, 3],
-        colors = ['green','yellow','red'];
+        grades = [90, 70, 50, 30, 10],
+        colors = ['#800026' ,'#BD0026','#E31A1C','#FC4E2A','#FD8D3C','#FEB24C','#FED976'];
 
     // loop through our density intervals and generate a label with a colored square for each interval
     for (var i = 0; i < grades.length; i++) {
