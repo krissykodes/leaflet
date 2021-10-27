@@ -1,5 +1,6 @@
 // Store our API endpoint as queryUrl.
 var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
+var queryUrl2 = "https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json";
 
 
 // Perform a GET request to the query URL.
@@ -40,6 +41,21 @@ function changeColor(feature) {
     return '#FED976';
   }
 }
+var plates = new L.LayerGroup()
+
+var queryUrl2 = "https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json";
+
+
+// Perform a GET request to the query URL.
+d3.json(queryUrl).then(function (data) {
+  console.log(data.features);
+  // Using the features array sent back in the API data, create a GeoJSON layer, and add it to the map.
+
+  // 1.
+  // Pass the features to a createFeatures() function:
+  createFeatures(data.features);
+
+});
 
 // 2. 
 function createFeatures(earthquakeData) {
@@ -73,6 +89,7 @@ function createFeatures(earthquakeData) {
 
 // 3.
 // createMap() takes the earthquake data and incorporates it into the visualization:
+var plates = new L.LayerGroup()
 
 function createMap(earthquakes) {
   // Create the base layers.
@@ -93,6 +110,7 @@ function createMap(earthquakes) {
   // Creat an overlays object.
   var overlayMaps = {
     "Earthquakes": earthquakes,
+    "Plates":plates
   };
   
   // Create a new map.
@@ -131,4 +149,25 @@ legend.onAdd = function (map) {
 };
 
 legend.addTo(myMap);
+
+
+var queryUrl2 = "https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json";
+
+
+// Perform a GET request to the query URL.
+d3.json(queryUrl2).then(function (data) {
+  console.log(data.features);
+  // Using the features array sent back in the API data, create a GeoJSON layer, and add it to the map.
+
+  // 1.
+  // Pass the features to a createFeatures() function:
+  L.geoJson(data, {
+    color: "orange",
+    weight: 2
+  })
+  .addTo(plates);
+  plates.addTo(myMap)
+
+
+});
 }
